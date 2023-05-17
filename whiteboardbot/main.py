@@ -1,13 +1,17 @@
 from . import motorshield
 import time
+from flask import Flask
 
 def run_bot():
-    while True:
-        for i in range(-100, 100, 1):
-            motorshield.set_motor(0, i/100)
-            motorshield.set_motor(1, 1-(i/100))
-            time.sleep(0.01)
+    app=Flask(__name__)
 
-        motorshield.set_motor(0, 0)
-        motorshield.set_motor(1, 0)
-        time.sleep(2)
+    @app.route('/')
+    def index():
+        return "Hey!"   
+        
+    @app.route('/<actionid>') 
+    def handleRequest(actionid):
+        print("actionid : {}".format(actionid))
+        return "OK 200"   
+                                
+    app.run(debug=True, port=5000, host='0.0.0.0',threaded=True)
