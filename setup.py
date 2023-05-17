@@ -10,4 +10,7 @@ setup(
     long_description=readme,
     author='Finn Harms',
     packages=find_packages(exclude=('tests', 'docs'))
+    entry_points = {
+        'console_scripts': ['run_bot=whiteboardbot.command_line:main'],
+    }
 )
