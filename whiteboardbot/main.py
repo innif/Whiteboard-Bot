@@ -9,7 +9,7 @@ def run_bot():
     def index():
         return "Hey!"   
         
-    @app.route('/motor/<id>/<power>') 
+    @app.route('/motor/<motor_id>/<power>') 
     def handle_request(motor_id: str, power: str):
         motor_id = int(motor_id)
         power = int(power)/100
