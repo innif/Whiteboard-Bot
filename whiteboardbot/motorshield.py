@@ -74,7 +74,7 @@ class PCA9685:
         self.write_reg(LED0_OFF_H+4*ch, off >> 8)
 
     def set_servo_pulse(self, channel, pulse: float):
-       pulse = int(pulse*4096)       #PWM frequency is 50HZ,the period is 20000us=20ms
+       pulse = int(pulse*4095)       #PWM frequency is 50HZ,the period is 20000us=20ms
        self.set_pwm(channel, 0, int(pulse))
 
 pwm = PCA9685()
@@ -132,7 +132,7 @@ if __name__=='__main__':
         pwm.set_servo_pulse(DC_MOTOR_PWM2,15000) # for TB6612 set speed
         # CCW
         pwm.set_servo_pulse(DC_MOTOR_INB1,0) # set INB1 L 
-        pwm.set_servo_pulse(DC_MOTOR_INB2,19999) # set INB2 H
+        pwm.set_servo_pulse(DC_MOTOR_INB2,1) # set INB2 H
         print("M2 rorate")
         time.sleep(2)
         # CW
