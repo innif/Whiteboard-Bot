@@ -16,9 +16,13 @@ def run_bot():
         print(f"Motor {motor_id} Power {power}")
         motorshield.set_motor(motor_id, power)
         return "OK 200"   
-
     
-    motorshield.set_motor(1, 1)
-    time.sleep(2)
-    motorshield.set_motor(1, 0)                      
+    @app.route('/steer/<m1_power>/<m2_power>') 
+    def handle_request(m1_power: str, m2_power: str):
+        m1_power = int(m1_power)
+        m2_power = int(m2_power)
+        motorshield.set_motor(0, m1_power)
+        motorshield.set_motor(1, m2_power)
+        return "OK 200"   
+                 
     app.run(debug=True, port=5000, host='0.0.0.0',threaded=True)
