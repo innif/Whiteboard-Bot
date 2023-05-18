@@ -81,6 +81,9 @@ pwm = PCA9685()
 pwm.set_pwm_freq(50) # for servo
 
 def set_motor(id: int, power: float):
+    if id != 0 and id != 1:
+        print("invalid id")
+        return False
     pin_pwm, pin_in1, pin_in2 = MOTOR_PINS[id]
     power = 1 if power > 1 else -1 if power < -1 else power
     if power > 0:
@@ -91,68 +94,10 @@ def set_motor(id: int, power: float):
         pwm.set_servo_pulse(pin_pwm, -power) # set speed
         pwm.set_servo_pulse(pin_in1, 1) # set INA1
         pwm.set_servo_pulse(pin_in2, 0) # set INA2
+    return True
     
 def motor_break(id: int):
     pass
 
 def set_servo(id: int, pos: int):
     pass
-
-
-if __name__=='__main__':
-    """for servo motor:
-    the high part of the pulse is T
-    T = 0.5ms => 0   degree
-    T = 1.0ms => 45  degree
-    T = 1.5ms => 90  degree
-    T = 2.0ms => 135 degree
-    T = 2.5ms => 180 degree
-  
-    for 2 channel DC motor driven by TB6612FNG
-    IN1   IN2  PWM  STBY  OUT1   OUT2      MODE
-    H     H   H/L   H     L      L    short brake
-    L     H    H    H     L      H       CCW
-    L     H    L    H     L      L    short brake
-    H     L    H    H     H      L       CW
-    H     L    L    H     L      L    short brake
-    L     L    H    H    OFF    OFF      STOP
-    H/L   H/L  H/L   L    OFF    OFF    standby
-    """
-    pwm = PCA9685()
-    pwm.set_pwm_freq(50) # for servo
-
-    while True:
-        """The following code is applied to
-        DC motor control
-        """
-        pwm.set_servo_pulse(DC_MOTOR_PWM1,0) # for TB6612 set speed to 0, stop        
-        print("M1 stop")
-        time.sleep(2)
-      
-        pwm.set_servo_pulse(DC_MOTOR_PWM2,15000) # for TB6612 set speed
-        # CCW
-        pwm.set_servo_pulse(DC_MOTOR_INB1,0) # set INB1 L 
-        pwm.set_servo_pulse(DC_MOTOR_INB2,1) # set INB2 H
-        print("M2 rorate")
-        time.sleep(2)
-        # CW
-        pwm.set_servo_pulse(DC_MOTOR_INB1,19999) # set INB1 H 
-        pwm.set_servo_pulse(DC_MOTOR_INB2,0) # set INB2 L
-        print("M2 rorate opposite")
-        time.sleep(2)
-        pwm.set_servo_pulse(DC_MOTOR_PWM2,0) # for TB6612 set speed to 0, stop
-        print("M2 stop")
-        time.sleep(2)
-        
-      
-        """The following code is applied to
-          servo motor control
-        """
-        print("servo ccw")
-        for i in range(500,2500,10):# start 500, end 2500, step is 10  
-           pwm.set_servo_pulse(SERVO_MOTOR_PWM3,i)   
-           time.sleep(0.02)    
-        print("servo cw")
-        for i in range(2500,500,-10):
-           pwm.set_servo_pulse(SERVO_MOTOR_PWM3,i) 
-           time.sleep(0.02)  
