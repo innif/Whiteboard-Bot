@@ -82,6 +82,7 @@ pwm.set_pwm_freq(50) # for servo
 
 def set_motor(id: int, power: float):
     if id != 0 and id != 1:
+        print("invalid id")
         return False
     pin_pwm, pin_in1, pin_in2 = MOTOR_PINS[id]
     power = 1 if power > 1 else -1 if power < -1 else power
