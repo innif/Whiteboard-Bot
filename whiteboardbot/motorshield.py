@@ -81,6 +81,8 @@ pwm = PCA9685()
 pwm.set_pwm_freq(50) # for servo
 
 def set_motor(id: int, power: float):
+    if id != 0 and id != 1:
+        return False
     pin_pwm, pin_in1, pin_in2 = MOTOR_PINS[id]
     power = 1 if power > 1 else -1 if power < -1 else power
     if power > 0:
@@ -91,6 +93,7 @@ def set_motor(id: int, power: float):
         pwm.set_servo_pulse(pin_pwm, -power) # set speed
         pwm.set_servo_pulse(pin_in1, 1) # set INA1
         pwm.set_servo_pulse(pin_in2, 0) # set INA2
+    return True
     
 def motor_break(id: int):
     pass
